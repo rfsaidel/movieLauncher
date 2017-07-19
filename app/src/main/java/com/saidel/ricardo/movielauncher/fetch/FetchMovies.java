@@ -3,6 +3,8 @@ package com.saidel.ricardo.movielauncher.fetch;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.saidel.ricardo.movielauncher.BuildConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +33,7 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
         String moviesJsonStr;
 
         try {
-            String APIkey = "HERE!!!";
+            String APIkey = BuildConfig.MOVIE_KEY;
             String baseUrl = "http://api.themoviedb.org/3/movie/popular?api_key="+APIkey;
             URL url = new URL(baseUrl);
 
