@@ -1,24 +1,24 @@
-package com.saidel.ricardo.movielauncher;
+package com.saidel.ricardo.movielauncher.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.saidel.ricardo.movielauncher.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MoviesAdapter extends BaseAdapter{
+public class MoviesAdapter extends BaseAdapter {
 
-    private ArrayList mMovieList = new ArrayList<>();
+    private ArrayList<String> mMovieList = new ArrayList<>();
     private Context mContext;
     private LayoutInflater inflater;
 
-    public MoviesAdapter(Context context, ArrayList<String> movieList){
+    public MoviesAdapter(Context context, ArrayList<String> movieList) {
         mMovieList = movieList;
         mContext = context;
     }
@@ -29,7 +29,7 @@ public class MoviesAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int i) {
+    public String getItem(int i) {
         return mMovieList.get(i);
     }
 
@@ -40,13 +40,14 @@ public class MoviesAdapter extends BaseAdapter{
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        inflater = (LayoutInflater) mContext.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.movie_item, viewGroup, false);
         ImageView movieCover = (ImageView) view.findViewById(R.id.movie_cover);
-        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185"+mMovieList.get(i)).into(movieCover);
+        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185" + mMovieList.get(i)).into(movieCover);
         return view;
     }
-    public void setData(ArrayList movies){
+
+    public void setData(ArrayList movies) {
         mMovieList = movies;
     }
 }

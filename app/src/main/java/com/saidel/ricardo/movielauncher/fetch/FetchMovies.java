@@ -1,4 +1,4 @@
-package com.saidel.ricardo.movielauncher;
+package com.saidel.ricardo.movielauncher.fetch;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -31,7 +31,7 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
         String moviesJsonStr;
 
         try {
-            String APIkey = "PASTE-HERE";
+            String APIkey = "HERE!!!";
             String baseUrl = "http://api.themoviedb.org/3/movie/popular?api_key="+APIkey;
             URL url = new URL(baseUrl);
 
