@@ -33,7 +33,7 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
         String moviesJsonStr;
 
         try {
-            String APIkey = BuildConfig.MOVIE_KEY;
+            String APIkey = BuildConfig.MOVIE_API_KEY;
             String baseUrl = "http://api.themoviedb.org/3/movie/popular?api_key="+APIkey;
             URL url = new URL(baseUrl);
 
