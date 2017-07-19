@@ -1,9 +1,12 @@
 package com.saidel.ricardo.movielauncher.fetch;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.saidel.ricardo.movielauncher.BuildConfig;
+import com.saidel.ricardo.movielauncher.object.Movie;
+import com.saidel.ricardo.movielauncher.util.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +25,15 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
     private String LOG_TAG = "FetchMovies";
     private Observer mCallback;
 
+    private String SCHEME = "http";
+    private String AUTHORITY = "api.themoviedb.org";
+    private String PATH = "3";
+    private String PATH_TYPE = "movie";
+    private String PATH_CAT = "popular";
+    private String API_KEY = "api_key";
+    private String METHOD = "GET";
+
+
     public FetchMovies(Observer callback){
         mCallback = callback;
     }
@@ -33,12 +45,19 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
         String moviesJsonStr;
 
         try {
-            String APIkey = BuildConfig.MOVIE_API_KEY;
-            String baseUrl = "http://api.themoviedb.org/3/movie/popular?api_key="+APIkey;
-            URL url = new URL(baseUrl);
+            Uri.Builder builder = new Uri.Builder();
+            builder.scheme(SCHEME)
+                    .authority(AUTHORITY)
+                    .appendPath(PATH)
+                    .appendPath(PATH_TYPE)
+                    .appendPath(PATH_CAT)
+                    .appendQueryParameter(API_KEY, Constants.MOVIE_API_KEY);
+            String movieUrl = builder.build().toString();
+            Log.v("r.saidel",movieUrl);
+            URL url = new URL(movieUrl);
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod(METHOD);
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
@@ -81,15 +100,21 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
             throws JSONException {
         JSONObject moviesJson = new JSONObject(moviewJsonStr);
         JSONArray results = moviesJson.getJSONArray("results");
-        ArrayList movies = new ArrayList<>();
+        ArrayList<Movie> movies = new ArrayList<>();
         for(int i = 0; i < results.length(); i++) {
+            Movie movieObj = new Movie();
             JSONObject movie = results.getJSONObject(i);
-            movies.add(movie.get("poster_path"));
+            movieObj.setPosterPath(movie.get("poster_path").toString());
+            movieObj.setOverview(movie.get("overview").toString());
+            movieObj.setReleaseDate(movie.get("release_date").toString());
+            movieObj.setVoteAverage(movie.get("vote_average").toString());
+            movieObj.setTitle(movie.get("title").toString());
+            movies.add(movieObj);
         }
         mCallback.onFetchMoviesTaskCompleted(movies);
     }
 
     public interface Observer {
-        void onFetchMoviesTaskCompleted(ArrayList movies);
+        void onFetchMoviesTaskCompleted(ArrayList<Movie> movies);
     }
 }
