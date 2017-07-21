@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.saidel.ricardo.movielauncher.R;
 import com.saidel.ricardo.movielauncher.object.Movie;
 import com.saidel.ricardo.movielauncher.util.Constants;
+import com.squareup.picasso.Picasso;
 
 public class DetailMovieActivity extends Activity {
     private TextView mMovieTitle;
@@ -16,7 +18,7 @@ public class DetailMovieActivity extends Activity {
     private TextView mMovieOverview;
     private TextView mMovieReleaseDate;
     private TextView mMoviePosterPath;
-
+    private ImageView mMovieCover;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,15 +30,19 @@ public class DetailMovieActivity extends Activity {
         mMovieOverview = (TextView) findViewById(R.id.movie_overview);
         mMovieReleaseDate = (TextView) findViewById(R.id.movie_release_date);
         mMoviePosterPath = (TextView) findViewById(R.id.movie_poster_path);
+        mMovieCover = (ImageView) findViewById(R.id.movie_cover);
 
         if (intent != null && intent.hasExtra(Constants.MOVIE_INTENT)) {
             Movie movie = (Movie) intent.getSerializableExtra(Constants.MOVIE_INTENT);
 
             mMovieTitle.setText(movie.getTitle());
-            mMovieVoteAverage.setText(movie.getVoteAverage());
+            mMovieVoteAverage.setText(movie.getVoteAverage()+"/10");
             mMovieOverview.setText(movie.getOverview());
-            mMovieReleaseDate.setText(movie.getReleaseDate());
+            mMovieReleaseDate.setText(movie.getReleaseDate().substring(0,4));
             mMoviePosterPath.setText(movie.getPosterPath());
+
+
+            Picasso.with(this).load(Constants.URL_LOAD_IMAGE_W185 + movie.getPosterPath()).into(mMovieCover);
         }
     }
 }
