@@ -47,7 +47,7 @@ public class MoviesAdapter extends BaseAdapter {
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.movie_item, viewGroup, false);
         ImageView movieCover = (ImageView) view.findViewById(R.id.movie_cover);
-        Picasso.with(mContext).load(Constants.URL_LOAD_IMAGE_W185 + mMovieList.get(i).getPosterPath()).into(movieCover);
+        Picasso.with(mContext).load(Constants.URL_LOAD_IMAGE_W342 + mMovieList.get(i).getPosterPath()).into(movieCover);
         return view;
     }
 

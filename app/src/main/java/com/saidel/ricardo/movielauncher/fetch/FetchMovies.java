@@ -53,7 +53,6 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
                     .appendPath(PATH_CAT)
                     .appendQueryParameter(API_KEY, Constants.MOVIE_API_KEY);
             String movieUrl = builder.build().toString();
-            Log.v("r.saidel",movieUrl);
             URL url = new URL(movieUrl);
 
             urlConnection = (HttpURLConnection) url.openConnection();

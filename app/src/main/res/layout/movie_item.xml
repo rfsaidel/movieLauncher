@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="166dp"
+    android:layout_height="250dp"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/movie_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
-
-</LinearLayout>
+        android:layout_gravity="center"
+        android:background="@drawable/border"
+        android:scaleType="centerCrop"
+        android:cropToPadding="true"
+        android:padding="1dp" />
+</FrameLayout>
