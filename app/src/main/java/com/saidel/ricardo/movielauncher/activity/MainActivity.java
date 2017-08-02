@@ -3,6 +3,7 @@ package com.saidel.ricardo.movielauncher.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
+import com.saidel.ricardo.movielauncher.data.DbHelper;
 import com.saidel.ricardo.movielauncher.fetch.FetchMovies;
 import com.saidel.ricardo.movielauncher.adapter.MoviesAdapter;
 import com.saidel.ricardo.movielauncher.R;
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
         FetchMovies fetchMovies = new FetchMovies(this);
         fetchMovies.execute();
         registerConnectionWatcher();
+
+        SQLiteDatabase db = new DbHelper(this).getReadableDatabase();
+        Toast.makeText(this, "db is open? " + db.isOpen(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
