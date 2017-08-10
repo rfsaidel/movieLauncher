@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
 
         SQLiteDatabase db = new DbHelper(this).getReadableDatabase();
         Log.v("r.saidel","DB is Open: "+db.isOpen());
-        //mContext.getContentResolver().insert();
     }
 
     @Override
