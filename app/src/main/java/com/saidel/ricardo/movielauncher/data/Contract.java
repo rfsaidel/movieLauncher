@@ -10,7 +10,7 @@ public class Contract {
     public static final String PATH_MOVIE = "movie";
 
     public static final class MovieEntry implements BaseColumns {
-
+        public static String MOVIE_PATH = "movie";
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIE).build();
 

@@ -17,6 +17,7 @@ public class Provider extends ContentProvider {
 
     private static UriMatcher getUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        uriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.MovieEntry.MOVIE_PATH, MOVIES);
         return uriMatcher;
     }
 
