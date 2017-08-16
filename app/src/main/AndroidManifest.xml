@@ -27,5 +27,8 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <provider
+            android:authorities="com.saidel.ricardo.movielauncher"
+            android:name=".data.Provider" />
     </application>
 </manifest>
