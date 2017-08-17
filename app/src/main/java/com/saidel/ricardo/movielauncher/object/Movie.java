@@ -3,11 +3,19 @@ package com.saidel.ricardo.movielauncher.object;
 import java.io.Serializable;
 
 public final class Movie implements Serializable{
+    private long mId;
     private String mTitle;
     private String mVoteAverage;
     private String mOverview;
     private String mReleaseDate;
     private String mPosterPath;
+
+    public void setId(long id){
+        this.mId = id;
+    }
+    public long getId(){
+        return mId;
+    }
 
     public void setTitle(String title){
         mTitle = title;

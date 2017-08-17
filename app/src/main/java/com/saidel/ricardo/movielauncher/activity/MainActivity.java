@@ -24,12 +24,13 @@ import com.saidel.ricardo.movielauncher.util.Constants;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements FetchMovies.Observer {
+public class MainActivity extends AppCompatActivity implements FetchMovies.Observer, ConnectionChange.Observer {
 
     private ArrayList<Movie> mMovieList;
     private MoviesAdapter mMoviesAdapter;
     private Context mContext;
     private ConnectionChange mInternetReceiver;
+    private MovieDAO mMovieDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
         mContext = this;
         setContentView(R.layout.activity_main);
         GridView moviesPanel = (GridView) this.findViewById(R.id.movie_panel);
-        mMovieList = new ArrayList<>();
+
+        mMovieDAO = new MovieDAO(this);
+        mMovieList = mMovieDAO.getMovies();
+
         mMoviesAdapter = new MoviesAdapter(this, mMovieList);
         moviesPanel.setAdapter(mMoviesAdapter);
 
@@ -52,17 +56,17 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
             }
         });
 
-        FetchMovies fetchMovies = new FetchMovies(this);
-        fetchMovies.execute();
         registerConnectionWatcher();
     }
 
     @Override
     public void onFetchMoviesTaskCompleted(ArrayList<Movie> movies) {
         mMoviesAdapter.setData(movies);
-        MovieDAO movieDAO = new MovieDAO(this);
+        mMovieDAO.deleteAll();
         for (int i = 0; i < movies.size(); i++) {
-            movieDAO.insert(movies.get(i++));
+            long newRowId = mMovieDAO.insert(movies.get(i));
+            movies.get(i).setId(newRowId);
+            Log.v("r.saidel","newRowId: "+newRowId);
         }
         runOnUiThread(new Runnable() {
             @Override
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
     }
 
     public void registerConnectionWatcher() {
-        mInternetReceiver = new ConnectionChange();
+        mInternetReceiver = new ConnectionChange(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             registerReceiver(mInternetReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
@@ -93,6 +97,14 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
             unregisterReceiver(mInternetReceiver);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnectionChange(boolean isConnected) {
+        if (isConnected) {
+            FetchMovies fetchMovies = new FetchMovies(this);
+            fetchMovies.execute();
         }
     }
 }

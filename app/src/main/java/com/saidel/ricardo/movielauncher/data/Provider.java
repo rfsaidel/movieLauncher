@@ -30,7 +30,20 @@ public class Provider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        return null;
+        final SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        final int match = mUriMatcher.match(uri);
+        Cursor cursor;
+
+        switch (match) {
+            case MOVIES: {
+                cursor = db.query(Contract.MovieEntry.TABLE_NAME, null, null, null, null, null, null);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        //cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
@@ -66,7 +79,19 @@ public class Provider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        final int match = mUriMatcher.match(uri);
+        int rowsDeleted = 0;
+
+        switch (match) {
+            case MOVIES: {
+                rowsDeleted = db.delete(Contract.MovieEntry.TABLE_NAME, null, null);
+                break;
+            }
+
+        }
+
+        return rowsDeleted;
     }
 
     @Override
