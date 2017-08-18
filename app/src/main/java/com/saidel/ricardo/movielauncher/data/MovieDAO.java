@@ -25,8 +25,9 @@ public class MovieDAO implements BaseColumns {
         return ContentUris.parseId(item);
     }
 
-    public void deleteAll() {
+    public int deleteAll() {
         int rowDeleted = mContext.getContentResolver().delete(Contract.MovieEntry.CONTENT_URI, null, null);
+        return rowDeleted;
     }
 
     public ArrayList<Movie> getMovies() {
@@ -41,8 +42,18 @@ public class MovieDAO implements BaseColumns {
         return movies;
     }
 
-    /*public ArrayList<Movie> getMovie() {
-    }*/
+    public Movie getMovie(long id) {
+        Movie movie;
+        String selection = Contract.MovieEntry._ID + "=?";
+        String selectionArgs[] = {Long.toString(id)};
+        Cursor cursor = mContext.getContentResolver().query(Contract.MovieEntry.CONTENT_URI, null, selection, selectionArgs, null);
+        if (cursor != null & cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            movie = resultMovie(cursor);
+            return movie;
+        }
+        return null;
+    }
 
     private Movie resultMovie(Cursor cursor) {
         Movie movie = new Movie();

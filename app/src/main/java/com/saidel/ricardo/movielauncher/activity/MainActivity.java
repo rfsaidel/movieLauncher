@@ -1,30 +1,32 @@
 package com.saidel.ricardo.movielauncher.activity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.saidel.ricardo.movielauncher.R;
 import com.saidel.ricardo.movielauncher.adapter.MoviesAdapter;
-import com.saidel.ricardo.movielauncher.data.DbHelper;
 import com.saidel.ricardo.movielauncher.data.MovieDAO;
 import com.saidel.ricardo.movielauncher.fetch.FetchMovies;
+import com.saidel.ricardo.movielauncher.fetch.FetchSearch;
 import com.saidel.ricardo.movielauncher.object.Movie;
 import com.saidel.ricardo.movielauncher.receiver.ConnectionChange;
 import com.saidel.ricardo.movielauncher.util.Constants;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements FetchMovies.Observer, ConnectionChange.Observer {
+public class MainActivity extends AppCompatActivity implements FetchMovies.Observer, FetchSearch.Observer, ConnectionChange.Observer {
 
     private ArrayList<Movie> mMovieList;
     private MoviesAdapter mMoviesAdapter;
@@ -51,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Movie movie = mMoviesAdapter.getItem(position);
                 Intent intent = new Intent(mContext, DetailMovieActivity.class)
-                        .putExtra(Constants.MOVIE_INTENT, movie);
+                        .putExtra(Constants.MOVIE_INTENT, movie)
+                        .putExtra(Constants.MOVIE_ID, movie.getId());
                 startActivity(intent);
             }
         });
@@ -66,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
         for (int i = 0; i < movies.size(); i++) {
             long newRowId = mMovieDAO.insert(movies.get(i));
             movies.get(i).setId(newRowId);
-            Log.v("r.saidel","newRowId: "+newRowId);
         }
         runOnUiThread(new Runnable() {
             @Override
@@ -106,5 +108,29 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
             FetchMovies fetchMovies = new FetchMovies(this);
             fetchMovies.execute();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search_menu));
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                FetchSearch fetchMovies = new FetchSearch((FetchSearch.Observer) mContext);
+                fetchMovies.setQuery(query);
+                fetchMovies.execute();
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        return true;
     }
 }

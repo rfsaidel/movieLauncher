@@ -36,7 +36,7 @@ public class Provider extends ContentProvider {
 
         switch (match) {
             case MOVIES: {
-                cursor = db.query(Contract.MovieEntry.TABLE_NAME, null, null, null, null, null, null);
+                cursor = db.query(Contract.MovieEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             }
             default:
