@@ -60,7 +60,6 @@ public class FetchSearch extends AsyncTask<Void, Void, Void> {
                     .appendQueryParameter(QUERY_VALUE, mQuery)
                     .appendQueryParameter(PAGE_NUMBER, "1");
             String movieUrl = builder.build().toString();
-            Log.v("r.saidel", "movieUrl: " + movieUrl);
             URL url = new URL(movieUrl);
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -109,14 +108,17 @@ public class FetchSearch extends AsyncTask<Void, Void, Void> {
         JSONArray results = moviesJson.getJSONArray("results");
         ArrayList<Movie> movies = new ArrayList<>();
         for (int i = 0; i < results.length(); i++) {
-            Movie movieObj = new Movie();
             JSONObject movie = results.getJSONObject(i);
-            movieObj.setPosterPath(movie.get("poster_path").toString());
-            movieObj.setOverview(movie.get("overview").toString());
-            movieObj.setReleaseDate(movie.get("release_date").toString());
-            movieObj.setVoteAverage(movie.get("vote_average").toString());
-            movieObj.setTitle(movie.get("title").toString());
-            movies.add(movieObj);
+            Log.v("r..saidel","poster_path: "+movie.get("poster_path").toString());
+            if (!movie.get("poster_path").toString().equals("null")) {
+                Movie movieObj = new Movie();
+                movieObj.setPosterPath(movie.get("poster_path").toString());
+                movieObj.setOverview(movie.get("overview").toString());
+                movieObj.setReleaseDate(movie.get("release_date").toString());
+                movieObj.setVoteAverage(movie.get("vote_average").toString());
+                movieObj.setTitle(movie.get("title").toString());
+                movies.add(movieObj);
+            }
         }
         mCallback.onFetchMoviesTaskCompleted(movies);
     }

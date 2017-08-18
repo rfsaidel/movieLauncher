@@ -113,6 +113,11 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_menu, menu);
+        setSearchBar(menu);
+        return true;
+    }
+
+    private void setSearchBar(Menu menu) {
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.search_menu));
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -131,6 +136,5 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
         searchView.setOnQueryTextListener(queryTextListener);
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        return true;
     }
 }
