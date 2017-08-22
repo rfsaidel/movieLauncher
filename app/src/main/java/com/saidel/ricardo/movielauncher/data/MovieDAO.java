@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.saidel.ricardo.movielauncher.object.Movie;
 
@@ -63,6 +62,7 @@ public class MovieDAO implements BaseColumns {
         movie.setVoteAverage(cursor.getString(cursor.getColumnIndex(Contract.MovieEntry.COLUMN_VOTE)));
         movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(Contract.MovieEntry.COLUMN_RELEASE_DATE)));
         movie.setPosterPath(cursor.getString(cursor.getColumnIndex(Contract.MovieEntry.COLUMN_COVER_URL)));
+        movie.setBackdropPath(cursor.getString(cursor.getColumnIndex(Contract.MovieEntry.COLUMN_BACKDROP_URL)));
         return movie;
     }
 
@@ -73,6 +73,7 @@ public class MovieDAO implements BaseColumns {
         contentValues.put(Contract.MovieEntry.COLUMN_COVER_URL, movie.getPosterPath());
         contentValues.put(Contract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
         contentValues.put(Contract.MovieEntry.COLUMN_VOTE, movie.getVoteAverage());
+        contentValues.put(Contract.MovieEntry.COLUMN_BACKDROP_URL, movie.getBackdropPath());
         return contentValues;
     }
 }

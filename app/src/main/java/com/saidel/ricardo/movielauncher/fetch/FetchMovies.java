@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.saidel.ricardo.movielauncher.BuildConfig;
 import com.saidel.ricardo.movielauncher.object.Movie;
 import com.saidel.ricardo.movielauncher.util.Constants;
 
@@ -31,10 +30,12 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
     private String PATH_TYPE = "movie";
     private String PATH_CAT = "popular";
     private String API_KEY = "api_key";
+    private String LANGUAGE_ISO = "language";
+    private String PAGE_NUMBER = "page";
     private String METHOD = "GET";
 
 
-    public FetchMovies(Observer callback){
+    public FetchMovies(Observer callback) {
         mCallback = callback;
     }
 
@@ -51,7 +52,9 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
                     .appendPath(PATH)
                     .appendPath(PATH_TYPE)
                     .appendPath(PATH_CAT)
-                    .appendQueryParameter(API_KEY, Constants.MOVIE_API_KEY);
+                    .appendQueryParameter(API_KEY, Constants.MOVIE_API_KEY)
+                    .appendQueryParameter(LANGUAGE_ISO, Constants.LANGUAGE_US_ISO)
+                    .appendQueryParameter(PAGE_NUMBER, "1");
             String movieUrl = builder.build().toString();
             URL url = new URL(movieUrl);
 
@@ -80,7 +83,7 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
             getMovieDataFromJson(moviesJsonStr);
         } catch (Exception e) {
             e.printStackTrace();
-        }   finally {
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
             }
@@ -100,10 +103,11 @@ public class FetchMovies extends AsyncTask<Void, Void, Void> {
         JSONObject moviesJson = new JSONObject(moviewJsonStr);
         JSONArray results = moviesJson.getJSONArray("results");
         ArrayList<Movie> movies = new ArrayList<>();
-        for(int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < results.length(); i++) {
             Movie movieObj = new Movie();
             JSONObject movie = results.getJSONObject(i);
             movieObj.setPosterPath(movie.get("poster_path").toString());
+            movieObj.setBackdropPath(movie.get("backdrop_path").toString());
             movieObj.setOverview(movie.get("overview").toString());
             movieObj.setReleaseDate(movie.get("release_date").toString());
             movieObj.setVoteAverage(movie.get("vote_average").toString());

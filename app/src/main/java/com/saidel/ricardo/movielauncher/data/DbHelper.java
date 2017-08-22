@@ -26,7 +26,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_COVER_URL + " TEXT, " +
                 MovieEntry.COLUMN_RELEASE_DATE + " DATE NOT NULL, " +
                 MovieEntry.COLUMN_OVERVIEW + " TEXT, " +
-                MovieEntry.COLUMN_VOTE + " REAL NOT NULL " +
+                MovieEntry.COLUMN_VOTE + " REAL NOT NULL, " +
+                MovieEntry.COLUMN_BACKDROP_URL + " TEXT " +
                 " ); ";
 
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_DATABASE);

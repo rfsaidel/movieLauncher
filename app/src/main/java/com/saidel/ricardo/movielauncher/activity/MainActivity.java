@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
@@ -56,6 +57,18 @@ public class MainActivity extends AppCompatActivity implements FetchMovies.Obser
                         .putExtra(Constants.MOVIE_INTENT, movie)
                         .putExtra(Constants.MOVIE_ID, movie.getId());
                 startActivity(intent);
+            }
+        });
+
+        moviesPanel.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
         });
 

@@ -20,6 +20,7 @@ public class Contract {
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_RELEASE_DATE = "release_date";
         public static final String COLUMN_COVER_URL = "cover_url";
+        public static final String COLUMN_BACKDROP_URL = "backdrop_url";
 
         public static Uri buildMovieUrl(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

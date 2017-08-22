@@ -18,6 +18,40 @@
             android:textColor="@color/colorWhite"
             android:textSize="40sp" />
 
+        <RelativeLayout
+            android:id="@+id/backdrop_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/backdrop_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:alpha="1.0"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:textSize="40sp" />
+
+            <TextView
+                android:shadowColor="@color/colorBlack"
+                android:shadowRadius="10"
+                android:id="@+id/backdrop_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:text="Movie"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,12 +62,12 @@
                 android:id="@+id/movie_cover"
                 android:layout_width="166dp"
                 android:layout_height="250dp"
-                android:layout_margin="20dp"
                 android:layout_gravity="center"
+                android:layout_margin="20dp"
                 android:background="@drawable/border"
-                android:scaleType="centerCrop"
                 android:cropToPadding="true"
-                android:padding="1dp" />
+                android:padding="1dp"
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/movie_release_date"

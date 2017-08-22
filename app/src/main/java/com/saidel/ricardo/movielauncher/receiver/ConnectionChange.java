@@ -5,18 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-
-import com.saidel.ricardo.movielauncher.fetch.FetchMovies;
-import com.saidel.ricardo.movielauncher.object.Movie;
-
-import java.util.ArrayList;
 
 public class ConnectionChange extends BroadcastReceiver {
 
     private Observer mCallBack;
 
-    public ConnectionChange(Observer callback){
+    public ConnectionChange() {
+    }
+
+    public ConnectionChange(Observer callback) {
         mCallBack = callback;
     }
 

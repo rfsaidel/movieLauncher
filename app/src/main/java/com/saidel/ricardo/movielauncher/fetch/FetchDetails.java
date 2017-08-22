@@ -1,13 +1,13 @@
 package com.saidel.ricardo.movielauncher.fetch;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.saidel.ricardo.movielauncher.object.Movie;
+import com.saidel.ricardo.movielauncher.object.MovieDetails;
 import com.saidel.ricardo.movielauncher.util.Constants;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,9 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
-public class FetchSearch extends AsyncTask<Void, Void, Void> {
+public class FetchDetails extends AsyncTask<Void, Void, Void> {
 
     private String LOG_TAG = "FetchMovies";
     private Observer mCallback;
@@ -27,16 +26,13 @@ public class FetchSearch extends AsyncTask<Void, Void, Void> {
     private String SCHEME = "https";
     private String AUTHORITY = "api.themoviedb.org";
     private String PATH = "3";
-    private String PATH_ENGINE = "search";
     private String PATH_TYPE = "movie";
+    private String mMovieId = "";
     private String API_KEY = "api_key";
     private String LANGUAGE_ISO = "language";
-    private String QUERY_VALUE = "query";
-    private String PAGE_NUMBER = "page";
     private String METHOD = "GET";
-    private String mQuery = "";
 
-    public FetchSearch(Observer callback) {
+    public FetchDetails(Observer callback) {
         mCallback = callback;
     }
 
@@ -51,12 +47,10 @@ public class FetchSearch extends AsyncTask<Void, Void, Void> {
             builder.scheme(SCHEME)
                     .authority(AUTHORITY)
                     .appendPath(PATH)
-                    .appendPath(PATH_ENGINE)
                     .appendPath(PATH_TYPE)
+                    .appendPath(mMovieId)
                     .appendQueryParameter(API_KEY, Constants.MOVIE_API_KEY)
-                    .appendQueryParameter(LANGUAGE_ISO, Constants.LANGUAGE_US_ISO)
-                    .appendQueryParameter(QUERY_VALUE, mQuery)
-                    .appendQueryParameter(PAGE_NUMBER, "1");
+                    .appendQueryParameter(LANGUAGE_ISO, Constants.LANGUAGE_US_ISO);
             String movieUrl = builder.build().toString();
             URL url = new URL(movieUrl);
 
@@ -102,29 +96,22 @@ public class FetchSearch extends AsyncTask<Void, Void, Void> {
 
     private void getMovieDataFromJson(String moviewJsonStr)
             throws JSONException {
-        JSONObject moviesJson = new JSONObject(moviewJsonStr);
-        JSONArray results = moviesJson.getJSONArray("results");
-        ArrayList<Movie> movies = new ArrayList<>();
-        for (int i = 0; i < results.length(); i++) {
-            JSONObject movie = results.getJSONObject(i);
-            if (!movie.get("poster_path").toString().equals("null")) {
-                Movie movieObj = new Movie();
-                movieObj.setPosterPath(movie.get("poster_path").toString());
-                movieObj.setOverview(movie.get("overview").toString());
-                movieObj.setReleaseDate(movie.get("release_date").toString());
-                movieObj.setVoteAverage(movie.get("vote_average").toString());
-                movieObj.setTitle(movie.get("title").toString());
-                movies.add(movieObj);
-            }
-        }
-        mCallback.onFetchMoviesTaskCompleted(movies);
+        JSONObject detailsJson = new JSONObject(moviewJsonStr);
+        MovieDetails movieDetails = new MovieDetails();
+        movieDetails.setId(Long.getLong(mMovieId));
+        movieDetails.setHomepage(detailsJson.get("homepage").toString());
+        movieDetails.setImdbId(detailsJson.get("imdb_id").toString());
+        movieDetails.setBudget(detailsJson.get("budget").toString());
+        movieDetails.setRevenue(detailsJson.get("revenue").toString());
+        movieDetails.setRuntime(detailsJson.get("runtime").toString());
+        mCallback.onFetchDetailsTaskCompleted(movieDetails);
     }
 
-    public void setQuery(String query) {
-        mQuery = query;
+    public void setMovieId(String id) {
+        mMovieId = id;
     }
 
     public interface Observer {
-        void onFetchMoviesTaskCompleted(ArrayList<Movie> movies);
+        void onFetchDetailsTaskCompleted(MovieDetails movieDetails);
     }
 }
